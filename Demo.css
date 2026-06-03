@@ -1,0 +1,519 @@
+.demo {
+  padding: 2rem 0;
+}
+
+.demo-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.demo-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.demo-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Experiment Selector */
+.experiment-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.experiment-btn {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Syne', sans-serif;
+  text-align: center;
+}
+
+.experiment-btn:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+.experiment-btn.active {
+  border-color: var(--accent-purple);
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(124, 58, 237, 0.1) 100%);
+  box-shadow: var(--glow-purple);
+}
+
+.btn-label {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Simulation Area */
+.simulation-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  min-height: 600px;
+}
+
+.stage-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.stage-info-panel h2 {
+  color: var(--accent-cyan);
+}
+
+.stage-description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  padding: 1rem;
+  background: rgba(0, 217, 255, 0.05);
+  border-left: 3px solid var(--accent-cyan);
+  border-radius: 4px;
+}
+
+.stage-details {
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.stage-details h4 {
+  color: var(--accent-purple);
+  margin-bottom: 1rem;
+}
+
+.stage-details ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stage-details li {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.stage-details li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+}
+
+.gene-selector {
+  background: rgba(236, 72, 153, 0.05);
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.gene-selector label {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.gene-selector select {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.gene-selector select:hover,
+.gene-selector select:focus {
+  border-color: var(--accent-cyan);
+  outline: none;
+}
+
+/* Visualization Panel */
+.visualization-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.visualization-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Cell Visualization */
+.cells-visualization {
+  background: rgba(0, 217, 255, 0.03);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.cells-visualization h4 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.cells-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  transition: var(--transition);
+  animation: none;
+}
+
+.cell:hover {
+  transform: scale(1.05);
+  border-color: var(--text-secondary);
+}
+
+.cell.entangled {
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.3) 0%, rgba(124, 58, 237, 0.2) 100%);
+  border-color: var(--accent-cyan);
+  box-shadow: inset 0 0 15px rgba(0, 217, 255, 0.2), 0 0 10px rgba(0, 217, 255, 0.3);
+  animation: cellPulse 2s ease-in-out infinite;
+}
+
+.cell.edited {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(0, 217, 255, 0.2) 100%);
+  border-color: var(--accent-green);
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.2), 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+@keyframes cellPulse {
+  0%, 100% {
+    box-shadow: inset 0 0 15px rgba(0, 217, 255, 0.2), 0 0 10px rgba(0, 217, 255, 0.3);
+  }
+  50% {
+    box-shadow: inset 0 0 20px rgba(0, 217, 255, 0.4), 0 0 20px rgba(0, 217, 255, 0.5);
+  }
+}
+
+.cell-legend {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.9rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.cell-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.cell-legend-item {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+}
+
+.cell-legend-item.normal {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.cell-legend-item.entangled {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+.cell-legend-item.edited {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+/* Metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.metric {
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin-bottom: 0.5rem;
+}
+
+.metric-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.metric-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  transition: width 0.3s ease-out;
+  border-radius: 3px;
+}
+
+.metric-fill.coherence {
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+}
+
+.metric-fill.edit {
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+
+/* DNA Visualization */
+.dna-visualization {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.dna-visualization h4 {
+  color: var(--accent-green);
+  margin-bottom: 1rem;
+}
+
+.dna-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.dna-strand {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dna-strand.before {
+  border-left: 3px solid var(--accent-pink);
+}
+
+.dna-strand.after {
+  border-left: 3px solid var(--accent-green);
+}
+
+.dna-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.dna-sequence {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.dna-arrow {
+  font-size: 1.5rem;
+  color: var(--accent-purple);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Demo Controls */
+.demo-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.stage-counter {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.running {
+  background: var(--accent-purple);
+  color: var(--text-primary);
+  box-shadow: var(--glow-purple);
+}
+
+/* Info Section */
+.info-section {
+  margin-top: 4rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.info-section h3 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.info-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.info-card:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.info-card h4 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .simulation-area {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .demo-container {
+    padding: 0 1rem;
+  }
+
+  .simulation-area {
+    padding: 1.5rem;
+  }
+
+  .experiment-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-info-panel {
+    padding-right: 0;
+  }
+
+  .cells-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dna-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .demo-controls {
+    flex-direction: column;
+  }
+
+  .stage-counter {
+    align-self: flex-start;
+  }
+
+  .button-group {
+    width: 100%;
+    justify-content: center;
+  }
+}

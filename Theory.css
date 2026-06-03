@@ -1,0 +1,266 @@
+.theory {
+  padding: 2rem 0;
+}
+
+.theory-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.theory-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.theory-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.theory-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3rem;
+}
+
+.toc-section {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.toc-section h3 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.toc {
+  list-style: none;
+}
+
+.toc li {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.toc li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-purple);
+}
+
+.toc a {
+  color: var(--text-secondary);
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.toc a:hover {
+  color: var(--accent-cyan);
+  padding-left: 0.5rem;
+}
+
+.toc ol {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.toc ol li {
+  margin-bottom: 0.5rem;
+}
+
+.article-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.article-section {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.article-section h2 {
+  color: var(--accent-cyan);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent-purple);
+}
+
+.article-section h3 {
+  color: var(--accent-purple);
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.article-section h4 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-section p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-section ol,
+.article-section ul {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+  color: var(--text-secondary);
+}
+
+.article-section li {
+  margin-bottom: 0.5rem;
+}
+
+.article-section a {
+  color: var(--accent-cyan);
+  transition: var(--transition);
+}
+
+.article-section a:hover {
+  color: var(--accent-purple);
+}
+
+/* Special Content Boxes */
+.highlight-box,
+.science-box,
+.assumption-box,
+.warning-box,
+.vision-box {
+  border-left: 4px solid;
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  background: rgba(0, 217, 255, 0.05);
+}
+
+.highlight-box {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 217, 255, 0.05);
+}
+
+.science-box {
+  border-color: var(--accent-purple);
+  background: rgba(124, 58, 237, 0.05);
+  margin: 1rem 0;
+}
+
+.assumption-box {
+  border-color: var(--accent-green);
+  background: rgba(16, 185, 129, 0.05);
+  margin: 1rem 0;
+}
+
+.assumption-box h4 {
+  color: var(--accent-green);
+}
+
+.warning-box {
+  border-color: var(--accent-pink);
+  background: rgba(236, 72, 153, 0.05);
+}
+
+.warning-box strong {
+  color: var(--accent-pink);
+}
+
+.warning-box ul {
+  margin-top: 1rem;
+}
+
+.vision-box {
+  border-color: var(--accent-cyan);
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.hypothesis-statement {
+  font-size: 1.15rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+  border-left: 4px solid var(--accent-purple);
+  border-radius: 4px;
+  color: var(--text-primary);
+  line-height: 1.8;
+}
+
+.references {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.references h2 {
+  color: var(--accent-cyan);
+}
+
+.references ul {
+  list-style: none;
+  padding: 0;
+}
+
+.references li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.references li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-purple);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .theory-container {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-section {
+    position: relative;
+    top: 0;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .article-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .highlight-box,
+  .science-box,
+  .assumption-box,
+  .warning-box,
+  .vision-box {
+    padding: 1rem;
+  }
+
+  .toc-section {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+}

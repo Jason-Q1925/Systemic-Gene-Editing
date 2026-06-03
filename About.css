@@ -1,0 +1,267 @@
+.about {
+  padding: 2rem 0;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.about-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.about-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.about-section {
+  margin-bottom: 3rem;
+}
+
+.about-section h2 {
+  color: var(--accent-cyan);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent-purple);
+  font-size: 2rem;
+}
+
+.about-section h3 {
+  color: var(--accent-purple);
+  margin: 1.5rem 0 1rem;
+  font-size: 1.2rem;
+}
+
+.about-section p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.about-section ul,
+.about-section ol {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.about-section li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.about-section a {
+  color: var(--accent-cyan);
+  transition: var(--transition);
+}
+
+.about-section a:hover {
+  color: var(--accent-purple);
+}
+
+/* Concept Grid */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.concept-card {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.concept-card:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-4px);
+}
+
+.concept-card h3 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.concept-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* Experiments List */
+.experiments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.experiment-card {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: var(--transition);
+}
+
+.experiment-card:hover {
+  border-color: var(--accent-purple);
+  box-shadow: var(--glow-purple);
+  transform: translateY(-4px);
+}
+
+.experiment-card h3 {
+  color: var(--accent-purple);
+  margin-bottom: 1rem;
+}
+
+.experiment-card p {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.experiment-card ol {
+  margin-top: 1rem;
+}
+
+/* Challenges List */
+.challenges-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.challenge-item {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%);
+  border-left: 4px solid var(--accent-pink);
+  border-radius: 4px;
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.challenge-item:hover {
+  border-left-color: var(--accent-cyan);
+  box-shadow: 0 4px 12px rgba(0, 217, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.challenge-item h3 {
+  color: var(--accent-pink);
+  margin-bottom: 0.75rem;
+}
+
+.challenge-item p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Author Box */
+.author-box {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.author-box h3 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.author-box p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.author-box ul {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* References List */
+.references-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.references-list li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.references-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+}
+
+.references-list li:last-child {
+  border-bottom: none;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, 
+    rgba(124, 58, 237, 0.15) 0%, 
+    rgba(0, 217, 255, 0.15) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 4rem;
+}
+
+.cta-section h2 {
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .concept-grid,
+  .experiments-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .concept-grid,
+  .experiments-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .author-box,
+  .cta-section {
+    padding: 1.5rem;
+  }
+
+  .challenge-item {
+    padding: 1rem;
+  }
+}

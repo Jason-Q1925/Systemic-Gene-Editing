@@ -246,21 +246,25 @@ function Demo() {
     if (!isRunning) return;
 
     const interval = setInterval(() => {
-      setSimulationData(prev => ({
-        cellsEntangled: Math.min(prev.cellsEntangled + 2, 100),
-        coherenceLevel: Math.min(prev.coherenceLevel + 1.5, 100),
-        editPropagation: Math.min(prev.editPropagation + 3, 100),
-        affectedCells: Math.min(prev.affectedCells + Math.floor(cellStates.length * 0.08), cellStates.length)
-      }));
+      setSimulationData(prev => {
+        const newData = {
+          cellsEntangled: Math.min(prev.cellsEntangled + 2, 100),
+          coherenceLevel: Math.min(prev.coherenceLevel + 1.5, 100),
+          editPropagation: Math.min(prev.editPropagation + 3, 100),
+          affectedCells: Math.min(prev.affectedCells + Math.floor(cellStates.length * 0.08), cellStates.length)
+        };
 
-      // Update cell states
-      setCellStates(prev =>
-        prev.map((cell, i) => ({
-          ...cell,
-          entangled: simulationData.cellsEntangled > i * (100 / cellStates.length),
-          edited: simulationData.editPropagation > i * (100 / cellStates.length)
-        }))
-      );
+        // Update cell states based on new data
+        setCellStates(prevCells =>
+          prevCells.map((cell, i) => ({
+            ...cell,
+            entangled: newData.cellsEntangled > i * (100 / cellStates.length),
+            edited: newData.editPropagation > i * (100 / cellStates.length)
+          }))
+        );
+
+        return newData;
+      });
     }, 300);
 
     return () => clearInterval(interval);

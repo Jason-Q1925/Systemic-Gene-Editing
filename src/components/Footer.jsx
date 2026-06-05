@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css';
+import './Footer_REDESIGN.css';
 
 function Footer() {
   return (
@@ -7,8 +7,11 @@ function Footer() {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h4>Quantum Entanglement Biology</h4>
-            <p>Exploring the intersection of quantum mechanics and genetic engineering.</p>
+            <h4>BioResonance</h4>
+            <p>Exploring quantum biology and systemic genetic editing.</p>
+            <div className="dev-status">
+              <span className="status-badge active">Active Development</span>
+            </div>
           </div>
           
           <div className="footer-section">
@@ -23,14 +26,16 @@ function Footer() {
           </div>
 
           <div className="footer-section">
-            <h4>References</h4>
-            <p>Based on peer-reviewed quantum biology research and genetic engineering studies.</p>
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="https://google.com">Original Article</a></li>
+              <li><a href="/about">Learn More</a></li>
+            </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2024 Quantum Entanglement Biology Research. All rights reserved.</p>
-          <p className="footer-note">This is a theoretical framework presented for educational purposes.</p>
+          <p><span className="copyright">&copy;</span> 2026 BioResonance · All rights reserved.</p>
         </div>
       </div>
     </footer>

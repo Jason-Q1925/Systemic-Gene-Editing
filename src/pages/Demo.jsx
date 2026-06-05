@@ -1,226 +1,278 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Demo.css';
 
 function Demo() {
   const [activeExperiment, setActiveExperiment] = useState('entanglement');
-  const [experimentStage, setExperimentStage] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [medicalGene, setMedicalGene] = useState('HBB');
-  const [biohackGene, setBiohackGene] = useState('CHLOROPLAST');
-  const [cellStates, setCellStates] = useState([]);
-  const [simulationData, setSimulationData] = useState({
-    cellsEntangled: 0,
-    coheenceLevel: 0,
-    editPropagation: 0,
-    affectedCells: 0,
-  });
+  const [selectedGene, setSelectedGene] = useState('HBB');
+  const [selectedBiohack, setSelectedBiohack] = useState('CHLOROPLAST');
+  const [currentStage, setCurrentStage] = useState(0);
+  const [animationProgress, setAnimationProgress] = useState(0);
+  const stageRefs = useRef([]);
+
+  // Gene data with timelines and adaptation details
+  const geneDatabase = {
+    HBB: {
+      name: 'HBB (Sickle Cell)',
+      mutation: 'CTG → GAG',
+      protein: 'Hemoglobin β-chain',
+      issue: 'Polymerization under low oxygen',
+      expressionTime: '24-48 hours',
+      adaptationTime: '7-14 days',
+      phenotypeTime: '14-30 days',
+      category: 'medical'
+    },
+    INS: {
+      name: 'INS (Diabetes)',
+      mutation: 'Insulin gene upregulation',
+      protein: 'Insulin',
+      issue: 'Insufficient insulin production',
+      expressionTime: '12-24 hours',
+      adaptationTime: '3-7 days',
+      phenotypeTime: '7-14 days',
+      category: 'medical'
+    },
+    CFTR: {
+      name: 'CFTR (Cystic Fibrosis)',
+      mutation: 'ΔF508 → corrected',
+      protein: 'CFTR ion channel',
+      issue: 'Protein misfolding and degradation',
+      expressionTime: '48-72 hours',
+      adaptationTime: '7-14 days',
+      phenotypeTime: '21-30 days',
+      category: 'medical'
+    },
+    TP53: {
+      name: 'TP53 (Cancer Resistance)',
+      mutation: 'Enhanced p53 expression',
+      protein: 'Tumor suppressor p53',
+      issue: 'Impaired apoptosis in cancerous cells',
+      expressionTime: '24-48 hours',
+      adaptationTime: '10-14 days',
+      phenotypeTime: '30-60 days',
+      category: 'medical'
+    },
+    APOB: {
+      name: 'APOB (Heart Health)',
+      mutation: 'Lipid metabolism optimization',
+      protein: 'Apolipoprotein B',
+      issue: 'Elevated cholesterol and triglycerides',
+      expressionTime: '24-48 hours',
+      adaptationTime: '7-14 days',
+      phenotypeTime: '14-28 days',
+      category: 'medical'
+    },
+    CHLOROPLAST: {
+      name: 'Chloroplast Integration',
+      mutation: 'Photosynthetic pathway insertion',
+      protein: 'Photosystem complexes',
+      issue: 'Oxygen production and glucose synthesis',
+      expressionTime: '48-72 hours',
+      adaptationTime: '14-21 days',
+      phenotypeTime: '30-60 days',
+      category: 'biohack'
+    },
+    SENSORY: {
+      name: 'Sensory Enhancement',
+      mutation: 'Filter gene suppression',
+      protein: 'Sensory ion channels',
+      issue: 'Limited perceptual bandwidth',
+      expressionTime: '24-48 hours',
+      adaptationTime: '21-30 days',
+      phenotypeTime: '60-90 days',
+      category: 'biohack'
+    },
+    METABOLISM: {
+      name: 'Metabolic Redesign',
+      mutation: 'Multi-pathway optimization',
+      protein: 'Metabolic enzymes',
+      issue: 'Inefficient energy utilization',
+      expressionTime: '36-72 hours',
+      adaptationTime: '14-30 days',
+      phenotypeTime: '30-90 days',
+      category: 'biohack'
+    }
+  };
 
   const experiments = {
     entanglement: {
       title: 'Cellular Entanglement Procedure',
-      description: 'Step-by-step activation of quantum entanglement across cellular systems',
+      description: 'Establishing quantum entanglement across all cells',
       stages: [
         {
-          name: 'Initial State',
-          description: 'Cells with EYFP-Prime Editor and EYFP-Cas13 fusion proteins. Each cell operates independently.',
-          visualization: 'cells-initial',
-          details: [
-            '• Prime Editor: DNA cutting enzyme fused to EYFP qubit',
-            '• Cas13: RNA-targeting enzyme fused to EYFP qubit',
-            '• EYFP: Enhanced Yellow Fluorescent Protein (spin qubit carrier)',
-            '• Each cell: ~10 trillion copies of editing machinery per cell'
+          name: 'Initial State: Independent Cells',
+          duration: 'Baseline',
+          details: 'Cells with EYFP-Prime Editor and EYFP-Cas13 fusion proteins. Each cell operates independently.',
+          visualization: 'initial-cells',
+          keyPoints: [
+            'EYFP protein qubits in each cell',
+            '~10 trillion copies per cell',
+            'No quantum coherence yet'
           ]
         },
         {
           name: 'Fröhlich Coherence Activation',
-          description: 'Thermal energy pumps microtubules into synchronized vibration, creating Fröhlich Bose-Einstein condensate.',
-          visualization: 'frohlich-activation',
-          details: [
-            '• Ambient thermal energy: 37°C mammalian temperature',
-            '• Microtubules: Begin synchronized oscillation',
-            '• Frequency: ~10¹⁴ Hz (coherent pumping rate)',
-            '• Coherence: Forms ordered water lattice protection',
-            '• Decoherence shields: Myelin sheath, enzyme pockets, ordered water'
+          duration: '1-2 minutes',
+          details: 'Thermal energy pumps microtubules into synchronized vibration, creating a Fröhlich Bose-Einstein condensate.',
+          visualization: 'frohlich-coherence',
+          keyPoints: [
+            '37°C thermal energy pumping',
+            'Microtubules vibrate at ~10¹⁴ Hz',
+            'Ordered water lattice forms'
           ]
         },
         {
-          name: 'Near-Infrared Pulse Initiation',
-          description: 'Calibrated near-infrared optical and microwave pulses excite EYFP qubits simultaneously.',
-          visualization: 'nir-pulse',
-          details: [
-            '• Wavelength: 780-1000 nm (near-infrared)',
-            '• Penetration depth: 5-10 mm into mammalian tissue',
-            '• Pulse duration: 100 femtoseconds',
-            '• Microwave frequency: 10¹⁰ Hz (qubit excitation)',
-            '• Effect: EYFP triplet state → optically addressable spin qubit'
+          name: 'Near-Infrared Pulse Application',
+          duration: '100 femtoseconds',
+          details: 'Calibrated near-infrared optical and microwave pulses excite EYFP qubits simultaneously across all cells.',
+          visualization: 'nir-pulse-animation',
+          keyPoints: [
+            '780-1000 nm wavelength penetrates tissue',
+            'EYFP triplet state activated',
+            '10¹⁰ Hz microwave frequency'
           ]
         },
         {
           name: 'Quantum Entanglement Collapse',
-          description: 'EYFP qubits collapse into synchronized entangled state. Prime Editor and Cas13 surrender individual identities.',
-          visualization: 'quantum-collapse',
-          details: [
-            '• Quantum measurement: Forces superposition collapse',
-            '• Entanglement: All EYFP qubits now correlated',
-            '• Wave function: Single unified quantum state across organism',
-            '• Coherence time: ~100 microseconds (maintained by Fröhlich pumping)',
-            '• Network: Biophoton exchange sustains re-entanglement'
+          duration: 'Instantaneous',
+          details: 'EYFP qubits collapse into synchronized entangled state. All cells surrender individual quantum identities.',
+          visualization: 'quantum-collapse-animation',
+          keyPoints: [
+            'Wave function unified across organism',
+            '~100 microseconds coherence time',
+            'All 37 trillion cells entangled'
           ]
         },
         {
           name: 'Organism-Wide Quantum Network',
-          description: 'Cellular entanglement established. Single edit now propagates organism-wide through quantum measurement.',
-          visualization: 'quantum-network',
-          details: [
-            '• Entangled cells: ~37 trillion cells in human body',
-            '• Wave function: Unified across all cellular DNA',
-            '• Coherence: Sustained by continuous Fröhlich mechanism',
-            '• Communication: Biophoton-mediated re-entanglement',
-            '• Measurement collapse: Forces quantum state synchronization'
+          duration: 'Sustained',
+          details: 'Cellular entanglement established. Biophoton exchange sustains re-entanglement. Ready for systemic editing.',
+          visualization: 'quantum-network-animation',
+          keyPoints: [
+            'Fröhlich mechanism sustains coherence',
+            'Single edit propagates instantly',
+            'Quantum measurement forces synchronization'
           ]
         }
       ]
     },
     medical: {
       title: 'Medical Experiment: Genetic Correction',
-      description: 'Demonstrating systemic HBB gene correction in sickle cell disease',
+      description: 'Systemic genetic correction via quantum entanglement',
       stages: [
         {
-          name: 'Disease State',
-          description: 'Tissue culture with HBB mutation (sickle cell disease phenotype)',
-          visualization: 'disease-state',
-          details: [
-            `• Gene target: ${medicalGene}`,
-            '• Mutation: Glutamic acid → Valine at position 6',
-            '• Protein: Hemoglobin β-chain',
-            '• Effect: Polymerization under low oxygen → sickle shape',
-            '• Tissue culture: Red blood cells showing sickling'
+          name: 'Disease State: Mutation Present',
+          duration: 'Baseline',
+          details: `Tissue culture with ${geneDatabase[selectedGene].mutation} mutation affecting ${geneDatabase[selectedGene].protein}.`,
+          visualization: 'disease-visualization',
+          keyPoints: [
+            `Mutation: ${geneDatabase[selectedGene].mutation}`,
+            `Protein: ${geneDatabase[selectedGene].protein}`,
+            `Issue: ${geneDatabase[selectedGene].issue}`
           ]
         },
         {
-          name: 'Entanglement Establishment',
-          description: 'Tissue culture pumped into entangled state using near-IR pulses',
-          visualization: 'medical-entanglement',
-          details: [
-            '• All cells: Brought into Fröhlich coherent state',
-            '• EYFP qubits: Excited via near-IR optical pulse',
-            '• Entanglement: All cellular DNA synchronized',
-            '• Duration: Maintained for duration of experiment',
-            '• Cells affected: 100% of tissue culture'
+          name: 'Establish Entanglement',
+          duration: '1-2 minutes',
+          details: 'Tissue culture pumped into Fröhlich coherent state using near-IR pulses. All cells synchronized.',
+          visualization: 'entanglement-spread',
+          keyPoints: [
+            '100% of cells entangled',
+            'Unified quantum wave function',
+            'Ready for targeted edit'
           ]
         },
         {
-          name: 'Prime Editor Introduction (Single Cell)',
-          description: 'Prime Editor targeting HBB mutation introduced to single cell in culture',
-          visualization: 'prime-editor-intro',
-          details: [
-            `• Target: ${medicalGene} - CTG → GAG base conversion (sickle → normal)`,
-            '• Mechanism: Reverse transcriptase synthesizes correction',
-            '• Delivery: Microinjection into single cell',
-            '• Specificity: ~95% on-target efficiency',
-            '• Cell marked: Single red cell in vast culture highlighted'
+          name: 'Prime Editor Injection',
+          duration: 'Instant',
+          details: 'Prime Editor targeting the mutation introduced via microinjection into single cell in culture.',
+          visualization: 'prime-editor-injection',
+          keyPoints: [
+            'Microinjection into one cell',
+            '~95% on-target efficiency',
+            `Correction: ${geneDatabase[selectedGene].mutation}`
           ]
         },
         {
           name: 'Quantum Measurement & Collapse',
-          description: 'Prime Editor reverse transcriptase reads coherent DNA proton qubits, forcing quantum collapse',
-          visualization: 'quantum-measurement',
-          details: [
-            '• Measurement: Reading coherent DNA proton qubits',
-            '• HBB sequence: CTG → GAG conversion in single cell',
-            '• Collapse: Forces all entangled cells into same state',
-            '• Information: Genetic edit propagates via quantum measurement',
-            '• Timescale: Instantaneous (speed of quantum entanglement)'
+          duration: 'Instantaneous',
+          details: 'Prime Editor reading coherent DNA qubits forces quantum collapse. All entangled cells adopt corrected state.',
+          visualization: 'quantum-measurement-animation',
+          keyPoints: [
+            'Wave function collapse forces synchronization',
+            'All cells receive genetic information',
+            'Single edit → organism-wide correction'
           ]
         },
         {
-          name: 'Bystander Cell Correction (Positive Result)',
-          description: 'Unedited "bystander" cells spontaneously exhibit corrected HBB sequence',
-          visualization: 'bystander-correction',
-          details: [
-            '• All cells: Now possess corrected HBB gene',
-            '• Sequence: GAG (normal hemoglobin)',
-            '• Observation: No cells retain original CTG mutation',
-            '• Mitosis: Daughter cells inherit corrected DNA',
-            '• Proof: Quantum entanglement successfully propagated edit'
+          name: 'Post-Edit Adaptation',
+          duration: `${geneDatabase[selectedGene].phenotypeTime}`,
+          details: 'Unedited cells spontaneously exhibit corrected sequence. Protein expression increases gradually. Phenotype emerges.',
+          visualization: 'adaptation-timeline',
+          keyPoints: [
+            `Expression: ${geneDatabase[selectedGene].expressionTime}`,
+            `Adaptation: ${geneDatabase[selectedGene].adaptationTime}`,
+            `Full phenotype: ${geneDatabase[selectedGene].phenotypeTime}`
           ]
         }
       ]
     },
     biohacking: {
-      title: 'Biohacking Experiment: Planimal Cells',
-      description: 'Integration of photosynthetic machinery into mammalian tissue',
+      title: 'Biohacking Experiment: Organism Enhancement',
+      description: 'Systemic biological enhancement via quantum entanglement',
       stages: [
         {
-          name: 'Planimal Tissue Setup',
-          description: 'Mammalian tissue model engineered with Synechococcus elongatus cyanobacteria chloroplast machinery',
-          visualization: 'planimal-setup',
-          details: [
-            `• Gene target: ${biohackGene}`,
-            '• Chloroplast machinery: From Synechococcus elongatus',
-            '• Integration: Transfected into mammalian tissue',
-            '• Status: Non-functional without host cell adaptation',
-            '• Challenge: Immune system recognizes foreign proteins'
+          name: 'Setup: Native Biology',
+          duration: 'Baseline',
+          details: 'Mammalian tissue without enhancement. Baseline phenotype established.',
+          visualization: 'native-biology',
+          keyPoints: [
+            'Standard mammalian cell machinery',
+            `Target: ${geneDatabase[selectedBiohack].name}`,
+            'Enhancement pathway to be introduced'
           ]
         },
         {
-          name: 'Entanglement Establishment',
-          description: 'Tissue pumped into entangled state via near-IR pulses',
-          visualization: 'biohack-entanglement',
-          details: [
-            '• All cells: Synchronized via Fröhlich coherence',
-            '• Quantum network: Unified cellular DNA wave function',
-            '• Coherence: Sustained by continuous thermal energy pumping',
-            '• Scope: All cells in tissue culture entangled',
-            '• Status: Ready for systemic RNA editing'
+          name: 'Establish Entanglement',
+          duration: '1-2 minutes',
+          details: 'Tissue pumped into entangled state via near-IR pulses. All cells synchronized.',
+          visualization: 'biohack-entanglement-spread',
+          keyPoints: [
+            'Unified cellular DNA wave function',
+            'All cells coherently connected',
+            'Ready for systemic modification'
           ]
         },
         {
-          name: 'Cas13 RNA Editor Introduction',
-          description: 'CRISPR-Cas13 base editor (A-to-I/C-to-U) targets immune rejection genes in single cell',
-          visualization: 'cas13-intro',
-          details: [
-            '• Mechanism: REPAIR or RESCUE base editor',
-            '• Target RNA: Immune MHC and TCR rejection genes',
-            '• Conversion: A-to-I or C-to-U RNA base pairing changes',
-            '• Effect: Temporarily suppresses immune rejection',
-            '• Duration: Edit persists until cell division'
+          name: 'Edit Immune Tolerance',
+          duration: 'Instant',
+          details: 'CRISPR-Cas13 base editor targets immune rejection genes in single cell. A→I and C→U conversions suppress immune response.',
+          visualization: 'cas13-editing',
+          keyPoints: [
+            'RNA-level editing (temporary)',
+            'MHC suppression via base editing',
+            'Duration: 24-72 hours'
           ]
         },
         {
-          name: 'Quantum Collapse & RNA Propagation',
-          description: 'Cas13 edit collapses quantum state. All cells adopt modified immune tolerance protein expression.',
-          visualization: 'rna-propagation',
-          details: [
-            '• Measurement: Cas13 RNA base conversion in single cell',
-            '• Collapse: Quantum measurement forces all cells to adopt edit',
-            '• Protein expression: Immune tolerance proteins now expressed',
-            '• Duration: Lasts until transcripts degraded (24-72 hours)',
-            '• Scope: Organism-wide tolerance to foreign chloroplast'
+          name: 'Insert Enhancement Pathway',
+          duration: 'Instant',
+          details: 'Prime Editor introduces enhancement genes in single cell. Quantum collapse forces all cells to express new pathway.',
+          visualization: 'enhancement-insertion',
+          keyPoints: [
+            `Enhancement: ${geneDatabase[selectedBiohack].name}`,
+            'Quantum measurement propagates edit',
+            'All cells receive new genetic instructions'
           ]
         },
         {
-          name: 'Hypoxia Challenge',
-          description: 'Tissue subjected to severe low-oxygen conditions. Near-IR light stimulates chloroplast photosynthesis.',
-          visualization: 'hypoxia-challenge',
-          details: [
-            '• Oxygen level: <5% (severe hypoxia)',
-            '• Duration: 15 minutes (mammalian tolerance limit)',
-            '• Stimulus: Near-IR light penetrates tissue (780-1000 nm)',
-            '• Photosynthesis: Chloroplasts activated by light',
-            '• Reaction: H₂O + CO₂ + light → O₂ + glucose'
-          ]
-        },
-        {
-          name: 'Positive Result: Oxygen Production',
-          description: 'Tissue produces oxygen internally and survives hypoxia. Quantum entanglement edit successful.',
-          visualization: 'oxygen-production',
-          details: [
-            '• Oxygen production: Detected via sensor',
-            '• Source: Internal chloroplast photosynthesis',
-            '• Survival: Tissue viable after 15-minute hypoxia',
-            '• Implication: Mammalian cells can now photosynthesize',
-            '• Proof: Systemic quantum RNA edit successful across tissue'
+          name: 'Immune Tolerance + Enhancement Integration',
+          duration: `${geneDatabase[selectedBiohack].phenotypeTime}`,
+          details: 'Tissue integrates new organelles/proteins. Immune system accepts foreign machinery. Enhancement phenotype emerges.',
+          visualization: 'integration-timeline',
+          keyPoints: [
+            `Tolerance: 24-72 hours (temporary)`,
+            `Expression: ${geneDatabase[selectedBiohack].expressionTime}`,
+            `Full integration: ${geneDatabase[selectedBiohack].phenotypeTime}`
           ]
         }
       ]
@@ -228,295 +280,477 @@ function Demo() {
   };
 
   const currentExperiment = experiments[activeExperiment];
-  const currentStage = currentExperiment.stages[experimentStage];
 
-  // Initialize cells on component mount
   useEffect(() => {
-    const initialCells = Array(12).fill(null).map((_, i) => ({
-      id: i,
-      entangled: false,
-      edited: false,
-      stage: 0
-    }));
-    setCellStates(initialCells);
+    // Simulate animation progress
+    const interval = setInterval(() => {
+      setAnimationProgress(prev => (prev + 1) % 100);
+    }, 50);
+    return () => clearInterval(interval);
   }, []);
 
-  // Run simulation
-  useEffect(() => {
-    if (!isRunning) return;
-
-    const interval = setInterval(() => {
-      setSimulationData(prev => {
-        const newData = {
-          cellsEntangled: Math.min(prev.cellsEntangled + 2, 100),
-          coherenceLevel: Math.min(prev.coherenceLevel + 1.5, 100),
-          editPropagation: Math.min(prev.editPropagation + 3, 100),
-          affectedCells: Math.min(prev.affectedCells + Math.floor(cellStates.length * 0.08), cellStates.length)
-        };
-
-        // Update cell states based on new data
-        setCellStates(prevCells =>
-          prevCells.map((cell, i) => ({
-            ...cell,
-            entangled: newData.cellsEntangled > i * (100 / cellStates.length),
-            edited: newData.editPropagation > i * (100 / cellStates.length)
-          }))
-        );
-
-        return newData;
-      });
-    }, 300);
-
-    return () => clearInterval(interval);
-  }, [isRunning, cellStates.length]);
+  const handleExperimentChange = (exp) => {
+    setActiveExperiment(exp);
+    setCurrentStage(0);
+  };
 
   const handleNextStage = () => {
-    if (experimentStage < currentExperiment.stages.length - 1) {
-      setExperimentStage(experimentStage + 1);
-      setIsRunning(false);
-      setSimulationData({ cellsEntangled: 0, coherenceLevel: 0, editPropagation: 0, affectedCells: 0 });
+    if (currentStage < currentExperiment.stages.length - 1) {
+      setCurrentStage(currentStage + 1);
+      // Scroll to next stage
+      setTimeout(() => {
+        stageRefs.current[currentStage + 1]?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
-  };
-
-  const handlePrevStage = () => {
-    if (experimentStage > 0) {
-      setExperimentStage(experimentStage - 1);
-      setIsRunning(false);
-      setSimulationData({ cellsEntangled: 0, coherenceLevel: 0, editPropagation: 0, affectedCells: 0 });
-    }
-  };
-
-  const handleReset = () => {
-    setExperimentStage(0);
-    setIsRunning(false);
-    setSimulationData({ cellsEntangled: 0, coherenceLevel: 0, editPropagation: 0, affectedCells: 0 });
-    setCellStates(cellStates.map(c => ({ ...c, entangled: false, edited: false })));
   };
 
   return (
-    <div className="demo">
+    <div className="demo-redesign">
       <div className="demo-header">
         <h1>Interactive Quantum Entanglement Simulation</h1>
-        <p>Accurately simulating Section 7: Cellular Entanglement Procedure & Experiments</p>
+        <p>Explore the three-phase cellular entanglement process</p>
       </div>
 
-      <div className="demo-container">
-        {/* Experiment Selector */}
-        <div className="experiment-selector">
-          <button 
-            className={`experiment-btn ${activeExperiment === 'entanglement' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveExperiment('entanglement');
-              handleReset();
-            }}
-          >
-            <div className="btn-label">Cellular Entanglement</div>
-            <div className="btn-desc">Procedure</div>
-          </button>
-          <button 
-            className={`experiment-btn ${activeExperiment === 'medical' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveExperiment('medical');
-              handleReset();
-            }}
-          >
-            <div className="btn-label">Medical Experiment</div>
-            <div className="btn-desc">Gene Correction</div>
-          </button>
-          <button 
-            className={`experiment-btn ${activeExperiment === 'biohacking' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveExperiment('biohacking');
-              handleReset();
-            }}
-          >
-            <div className="btn-label">Biohacking Experiment</div>
-            <div className="btn-desc">Planimal Cells</div>
-          </button>
-        </div>
-
-        {/* Main Simulation Area */}
-        <div className="simulation-area">
-          {/* Left Panel - Stage Info */}
-          <div className="stage-info-panel">
-            <h2>{currentStage.name}</h2>
-            <p className="stage-description">{currentStage.description}</p>
-            
-            <div className="stage-details">
-              <h4>Technical Details:</h4>
-              <ul>
-                {currentStage.details.map((detail, idx) => (
-                  <li key={idx}>{detail}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Gene Selectors */}
-            {activeExperiment === 'medical' && (
-              <div className="gene-selector">
-                <label>Target Gene:</label>
-                <select value={medicalGene} onChange={(e) => setMedicalGene(e.target.value)}>
-                  <option value="HBB">HBB (Sickle Cell)</option>
-                  <option value="INS">INS (Diabetes)</option>
-                  <option value="CFTR">CFTR (Cystic Fibrosis)</option>
-                </select>
-              </div>
-            )}
-
-            {activeExperiment === 'biohacking' && (
-              <div className="gene-selector">
-                <label>Target System:</label>
-                <select value={biohackGene} onChange={(e) => setBiohackGene(e.target.value)}>
-                  <option value="CHLOROPLAST">Chloroplast Integration</option>
-                  <option value="SENSORY">Sensory Enhancement</option>
-                  <option value="METABOLISM">Metabolic Redesign</option>
-                </select>
-              </div>
-            )}
-          </div>
-
-          {/* Right Panel - Visualization */}
-          <div className="visualization-panel">
-            <div className="visualization-container">
-              {/* Cell Visualization */}
-              <div className="cells-visualization">
-                <h4>Cellular States</h4>
-                <div className="cells-grid">
-                  {cellStates.map((cell) => (
-                    <div
-                      key={cell.id}
-                      className={`cell ${cell.entangled ? 'entangled' : ''} ${cell.edited ? 'edited' : ''}`}
-                      title={`Cell ${cell.id}: ${cell.entangled ? 'Entangled ' : ''}${cell.edited ? 'Edited ' : ''}${!cell.entangled && !cell.edited ? 'Normal' : ''}`}
-                    ></div>
-                  ))}
-                </div>
-                <div className="cell-legend">
-                  <span><div className="cell-legend-item normal"></div> Normal</span>
-                  <span><div className="cell-legend-item entangled"></div> Entangled</span>
-                  <span><div className="cell-legend-item edited"></div> Edited</span>
-                </div>
-              </div>
-
-              {/* Metrics */}
-              <div className="metrics">
-                <div className="metric">
-                  <div className="metric-label">Cells Entangled</div>
-                  <div className="metric-value">{Math.round(simulationData.cellsEntangled)}%</div>
-                  <div className="metric-bar">
-                    <div className="metric-fill" style={{ width: `${simulationData.cellsEntangled}%` }}></div>
-                  </div>
-                </div>
-
-                <div className="metric">
-                  <div className="metric-label">Coherence Level</div>
-                  <div className="metric-value">{Math.round(simulationData.coherenceLevel)}%</div>
-                  <div className="metric-bar">
-                    <div className="metric-fill coherence" style={{ width: `${simulationData.coherenceLevel}%` }}></div>
-                  </div>
-                </div>
-
-                <div className="metric">
-                  <div className="metric-label">Edit Propagation</div>
-                  <div className="metric-value">{Math.round(simulationData.editPropagation)}%</div>
-                  <div className="metric-bar">
-                    <div className="metric-fill edit" style={{ width: `${simulationData.editPropagation}%` }}></div>
-                  </div>
-                </div>
-
-                <div className="metric">
-                  <div className="metric-label">Affected Cells</div>
-                  <div className="metric-value">{simulationData.affectedCells}/{cellStates.length}</div>
-                </div>
-              </div>
-
-              {/* DNA/RNA Visualization */}
-              <div className="dna-visualization">
-                <h4>Molecular State</h4>
-                <div className="dna-container">
-                  <div className="dna-strand before">
-                    <div className="dna-label">Before Edit</div>
-                    <div className="dna-sequence">
-                      {activeExperiment === 'medical' ? 'CTG...' : 'MHC-I...'}
-                    </div>
-                  </div>
-                  <div className="dna-arrow">→</div>
-                  <div className="dna-strand after">
-                    <div className="dna-label">After Edit</div>
-                    <div className="dna-sequence">
-                      {activeExperiment === 'medical' ? 'GAG...' : 'MODIFIED...'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="demo-controls">
-          <div className="stage-counter">
-            Stage {experimentStage + 1} of {currentExperiment.stages.length}
-          </div>
-
-          <div className="button-group">
-            <button 
-              className="btn btn-sm"
-              onClick={handlePrevStage}
-              disabled={experimentStage === 0}
-            >
-              ← Previous
-            </button>
-
-            <button 
-              className={`btn btn-sm btn-primary ${isRunning ? 'running' : ''}`}
-              onClick={() => setIsRunning(!isRunning)}
-            >
-              {isRunning ? '⏸ Pause' : '▶ Run Simulation'}
-            </button>
-
-            <button 
-              className="btn btn-sm"
-              onClick={handleNextStage}
-              disabled={experimentStage === currentExperiment.stages.length - 1}
-            >
-              Next →
-            </button>
-
-            <button 
-              className="btn btn-sm"
-              onClick={handleReset}
-              style={{ marginLeft: 'auto' }}
-            >
-              Reset
-            </button>
-          </div>
-        </div>
+      {/* Experiment Selector */}
+      <div className="experiment-selector">
+        <button 
+          className={`exp-btn ${activeExperiment === 'entanglement' ? 'active' : ''}`}
+          onClick={() => handleExperimentChange('entanglement')}
+        >
+          <div className="btn-title">Cellular Entanglement</div>
+          <div className="btn-subtitle">Foundational Procedure</div>
+        </button>
+        <button 
+          className={`exp-btn ${activeExperiment === 'medical' ? 'active' : ''}`}
+          onClick={() => handleExperimentChange('medical')}
+        >
+          <div className="btn-title">Medical Correction</div>
+          <div className="btn-subtitle">Gene Editing Experiment</div>
+        </button>
+        <button 
+          className={`exp-btn ${activeExperiment === 'biohacking' ? 'active' : ''}`}
+          onClick={() => handleExperimentChange('biohacking')}
+        >
+          <div className="btn-title">Biohacking Enhancement</div>
+          <div className="btn-subtitle">Organism Enhancement</div>
+        </button>
       </div>
 
-      {/* Information Panel */}
-      <div className="info-section">
-        <h3>How to Use This Simulation</h3>
+      {/* Gene/System Selectors */}
+      <div className="parameter-selector">
+        {activeExperiment === 'medical' && (
+          <div className="param-group">
+            <label>Select Target Gene:</label>
+            <div className="gene-options">
+              {['HBB', 'INS', 'CFTR', 'TP53', 'APOB'].map(gene => (
+                <button
+                  key={gene}
+                  className={`gene-option ${selectedGene === gene ? 'selected' : ''}`}
+                  onClick={() => setSelectedGene(gene)}
+                >
+                  {geneDatabase[gene].name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeExperiment === 'biohacking' && (
+          <div className="param-group">
+            <label>Select Enhancement System:</label>
+            <div className="gene-options">
+              {['CHLOROPLAST', 'SENSORY', 'METABOLISM'].map(system => (
+                <button
+                  key={system}
+                  className={`gene-option ${selectedBiohack === system ? 'selected' : ''}`}
+                  onClick={() => setSelectedBiohack(system)}
+                >
+                  {geneDatabase[system].name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Stage Display */}
+      <div className="stages-container">
+        {currentExperiment.stages.map((stage, index) => (
+          <div 
+            key={index}
+            ref={el => stageRefs.current[index] = el}
+            className="stage-display"
+          >
+            <div className="stage-header">
+              <div className="stage-counter">
+                <span className="stage-num">{index + 1}</span>
+                <span className="stage-total">of {currentExperiment.stages.length}</span>
+              </div>
+              <h2>{stage.name}</h2>
+              <p className="stage-duration">Duration: {stage.duration}</p>
+            </div>
+
+            <div className="stage-content">
+              {/* Left: Details Sidebar */}
+              <div className="stage-details-sidebar">
+                <div className="details-header">
+                  <h3>Technical Details</h3>
+                </div>
+                <div className="details-list">
+                  <p className="stage-description">{stage.details}</p>
+                  <ul>
+                    {stage.keyPoints.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Right: Visualization */}
+              <div className="stage-visualization">
+                <StageVisualization 
+                  type={stage.visualization}
+                  progress={animationProgress}
+                  experiment={activeExperiment}
+                  geneData={activeExperiment === 'medical' ? geneDatabase[selectedGene] : geneDatabase[selectedBiohack]}
+                />
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="stage-navigation">
+              <button 
+                className="nav-btn prev"
+                onClick={() => {
+                  if (index > 0) {
+                    setCurrentStage(index - 1);
+                    stageRefs.current[index - 1]?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                disabled={index === 0}
+              >
+                ← Previous Stage
+              </button>
+              <button 
+                className="nav-btn next"
+                onClick={() => {
+                  if (index < currentExperiment.stages.length - 1) {
+                    setCurrentStage(index + 1);
+                    stageRefs.current[index + 1]?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                disabled={index === currentExperiment.stages.length - 1}
+              >
+                Next Stage →
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Information Section */}
+      <div className="demo-info-section">
+        <h2>How to Use This Simulation</h2>
         <div className="info-grid">
           <div className="info-card">
-            <h4>Select an Experiment</h4>
-            <p>Choose between the three Section 7 experiments: cellular entanglement procedure, medical gene correction, or biohacking planimal cells.</p>
+            <h3>Select an Experiment</h3>
+            <p>Choose between the three phases: foundational entanglement procedure, medical correction, or biohacking enhancement.</p>
           </div>
           <div className="info-card">
-            <h4>Progress Through Stages</h4>
-            <p>Click "Next" to advance through detailed procedural steps, or "Previous" to review earlier stages.</p>
+            <h3>Customize Parameters</h3>
+            <p>Select specific genes or enhancement systems to see how the procedure adapts to different biological targets.</p>
           </div>
           <div className="info-card">
-            <h4>Run Simulations</h4>
-            <p>Press "Run Simulation" to see real-time cellular state changes, entanglement metrics, and edit propagation visualization.</p>
+            <h3>Progress Through Stages</h3>
+            <p>Each stage displays with its own visualization and timeline. Scroll through to see the complete procedure.</p>
           </div>
           <div className="info-card">
-            <h4>Vary Parameters</h4>
-            <p>Select different target genes or systems to see how the entanglement procedure adapts to different genetic targets.</p>
+            <h3>Realistic Timelines</h3>
+            <p>View how long each adaptation takes: from expression to full phenotypic change.</p>
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+// Visualization component for each stage
+function StageVisualization({ type, progress, experiment, geneData }) {
+  switch(type) {
+    case 'initial-cells':
+      return (
+        <div className="visualization">
+          <h4>Independent Cellular State</h4>
+          <div className="cells-grid-vis">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="cell-vis independent"></div>
+            ))}
+          </div>
+          <p className="vis-label">Each cell operates independently</p>
+        </div>
+      );
+
+    case 'frohlich-coherence':
+      return (
+        <div className="visualization">
+          <h4>Fröhlich Coherence Activation</h4>
+          <div className="coherence-visualization">
+            <div className="microtubule-representation">
+              <div className="oscillation" style={{ opacity: Math.sin(progress * Math.PI / 50) + 0.5 }}></div>
+            </div>
+            <div className="thermal-energy-indicator">
+              <div className="energy-level" style={{ height: `${Math.sin(progress * Math.PI / 50) * 50 + 50}%` }}></div>
+            </div>
+          </div>
+          <p className="vis-label">Thermal energy pumping microtubules into synchronized vibration</p>
+        </div>
+      );
+
+    case 'nir-pulse-animation':
+      return (
+        <div className="visualization">
+          <h4>Near-Infrared Pulse Excitation</h4>
+          <div className="nir-visualization">
+            <div className="tissue-layer"></div>
+            <div className="photon-pulse" style={{ opacity: Math.sin(progress * Math.PI / 50) }}></div>
+            <div className="eyfp-response" style={{ transform: `scale(${0.8 + Math.sin(progress * Math.PI / 50) * 0.2})` }}></div>
+          </div>
+          <p className="vis-label">780-1000nm photons penetrate tissue, exciting EYFP qubits</p>
+        </div>
+      );
+
+    case 'quantum-collapse-animation':
+      return (
+        <div className="visualization">
+          <h4>Quantum Wave Function Collapse</h4>
+          <div className="collapse-visualization">
+            <div className="wave-function" style={{ opacity: 1 - progress / 100 }}></div>
+            <div className="particles-entangled">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div 
+                  key={i} 
+                  className="particle"
+                  style={{ 
+                    left: `${(Math.sin(progress * Math.PI / 50 + i) * 40 + 50)}%`,
+                    opacity: Math.min(1, progress / 50)
+                  }}
+                ></div>
+              ))}
+            </div>
+          </div>
+          <p className="vis-label">All qubits synchronize to single quantum state</p>
+        </div>
+      );
+
+    case 'quantum-network-animation':
+      return (
+        <div className="visualization">
+          <h4>Organism-Wide Quantum Network</h4>
+          <div className="network-visualization">
+            <div className="network-nodes">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="node"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animation: `pulse 2s ease-in-out infinite`,
+                    animationDelay: `${i * 0.1}s`
+                  }}
+                ></div>
+              ))}
+            </div>
+            <svg className="network-connections" viewBox="0 0 400 300">
+              {Array.from({ length: 15 }).map((_, i) => (
+                <line
+                  key={i}
+                  x1={Math.random() * 400}
+                  y1={Math.random() * 300}
+                  x2={Math.random() * 400}
+                  y2={Math.random() * 300}
+                  stroke="var(--accent-orange)"
+                  strokeWidth="1"
+                  opacity={Math.sin(progress * Math.PI / 50) * 0.5 + 0.5}
+                />
+              ))}
+            </svg>
+          </div>
+          <p className="vis-label">37 trillion cells connected via quantum coherence</p>
+        </div>
+      );
+
+    case 'disease-visualization':
+      return (
+        <div className="visualization">
+          <h4>Disease State Baseline</h4>
+          <div className="gene-comparison">
+            <div className="gene-panel">
+              <h5>Mutant Gene</h5>
+              <div className="dna-sequence">{geneData.mutation}</div>
+              <p className="mutation-effect">{geneData.issue}</p>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'entanglement-spread':
+      return (
+        <div className="visualization">
+          <h4>Entanglement Spread</h4>
+          <div className="cells-grid-vis">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div 
+                key={i} 
+                className={`cell-vis ${i < progress / 8 ? 'entangled' : 'independent'}`}
+              ></div>
+            ))}
+          </div>
+          <p className="vis-label">{Math.round(progress / 8) * 8}% of cells entangled</p>
+        </div>
+      );
+
+    case 'prime-editor-injection':
+      return (
+        <div className="visualization">
+          <h4>Prime Editor Introduction</h4>
+          <div className="injection-visualization">
+            <div className="target-cell"></div>
+            <div className="editor-particle" style={{ opacity: Math.sin(progress * Math.PI / 50) }}></div>
+          </div>
+          <p className="vis-label">Single cell receives editing enzyme</p>
+        </div>
+      );
+
+    case 'quantum-measurement-animation':
+      return (
+        <div className="visualization">
+          <h4>Quantum Measurement Cascade</h4>
+          <div className="cascade-visualization">
+            <div className="central-cell"></div>
+            <div className="cascade-wave" style={{ transform: `scale(${1 + progress / 50})`, opacity: Math.max(0, 1 - progress / 80) }}></div>
+          </div>
+          <p className="vis-label">Edit propagates to all entangled cells instantaneously</p>
+        </div>
+      );
+
+    case 'adaptation-timeline':
+      return (
+        <div className="visualization">
+          <h4>Post-Edit Adaptation Timeline</h4>
+          <div className="timeline-visualization">
+            <div className="timeline-bar">
+              <div className="timeline-phase expression" style={{ width: '25%' }}>
+                <span>Expression</span>
+              </div>
+              <div className="timeline-phase adaptation" style={{ width: '35%' }}>
+                <span>Adaptation</span>
+              </div>
+              <div className="timeline-phase phenotype" style={{ width: '40%' }}>
+                <span>Phenotype</span>
+              </div>
+            </div>
+            <div className="timeline-labels">
+              <span>{geneData.expressionTime}</span>
+              <span>{geneData.adaptationTime}</span>
+              <span>{geneData.phenotypeTime}</span>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'native-biology':
+      return (
+        <div className="visualization">
+          <h4>Native Mammalian Phenotype</h4>
+          <div className="cells-grid-vis">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="cell-vis native"></div>
+            ))}
+          </div>
+          <p className="vis-label">Standard mammalian cells without enhancement</p>
+        </div>
+      );
+
+    case 'biohack-entanglement-spread':
+      return (
+        <div className="visualization">
+          <h4>Entanglement Establishment</h4>
+          <div className="cells-grid-vis">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div 
+                key={i} 
+                className={`cell-vis ${i < progress / 8 ? 'entangled' : 'native'}`}
+              ></div>
+            ))}
+          </div>
+          <p className="vis-label">{Math.round(progress / 8) * 8}% of cells synchronized</p>
+        </div>
+      );
+
+    case 'cas13-editing':
+      return (
+        <div className="visualization">
+          <h4>RNA Base Editing</h4>
+          <div className="rna-editing-viz">
+            <div className="rna-strand">
+              <span className="rna-base">A</span>
+              <span className="rna-base">→</span>
+              <span className="rna-base edited">I</span>
+            </div>
+            <div className="rna-strand">
+              <span className="rna-base">C</span>
+              <span className="rna-base">→</span>
+              <span className="rna-base edited">U</span>
+            </div>
+          </div>
+          <p className="vis-label">Temporary immune tolerance via RNA editing</p>
+        </div>
+      );
+
+    case 'enhancement-insertion':
+      return (
+        <div className="visualization">
+          <h4>Enhancement Gene Insertion</h4>
+          <div className="insertion-viz">
+            <div className="dna-original"></div>
+            <div className="plus-sign">+</div>
+            <div className="enhancement-sequence"></div>
+            <div className="arrow">=</div>
+            <div className="dna-enhanced"></div>
+          </div>
+          <p className="vis-label">{geneData.name} pathway integrated</p>
+        </div>
+      );
+
+    case 'integration-timeline':
+      return (
+        <div className="visualization">
+          <h4>Enhancement Integration Timeline</h4>
+          <div className="timeline-visualization">
+            <div className="timeline-bar">
+              <div className="timeline-phase expression" style={{ width: '20%' }}>
+                <span>Tolerance</span>
+              </div>
+              <div className="timeline-phase adaptation" style={{ width: '30%' }}>
+                <span>Expression</span>
+              </div>
+              <div className="timeline-phase phenotype" style={{ width: '50%' }}>
+                <span>Integration</span>
+              </div>
+            </div>
+            <div className="timeline-labels">
+              <span>24-72h</span>
+              <span>{geneData.expressionTime}</span>
+              <span>{geneData.phenotypeTime}</span>
+            </div>
+          </div>
+        </div>
+      );
+
+    default:
+      return <div className="visualization">No visualization available</div>;
+  }
 }
 
 export default Demo;

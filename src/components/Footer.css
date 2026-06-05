@@ -1,5 +1,5 @@
 .footer {
-  background: linear-gradient(135deg, rgba(15, 20, 40, 0.9) 0%, rgba(10, 14, 39, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%);
   border-top: 1px solid var(--border-color);
   margin-top: 4rem;
   padding: 3rem 0 1rem;
@@ -42,26 +42,66 @@
   color: var(--text-secondary);
   transition: var(--transition);
   text-decoration: none;
+  position: relative;
+}
+
+.footer-section a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent-orange);
+  transition: var(--transition);
 }
 
 .footer-section a:hover {
-  color: var(--accent-cyan);
+  color: var(--accent-orange);
 }
 
+.footer-section a:hover::after {
+  width: 100%;
+}
+
+/* Development Status Badge */
+.dev-status {
+  margin-top: 1rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid var(--accent-orange);
+  color: var(--accent-orange);
+}
+
+.status-badge.active {
+  background: rgba(255, 140, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+}
+
+/* Footer Bottom */
 .footer-bottom {
   text-align: center;
   padding: 1rem 0;
 }
 
 .footer-bottom p {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   font-size: 0.85rem;
+  color: var(--text-tertiary);
 }
 
-.footer-note {
-  color: var(--accent-cyan);
-  font-size: 0.8rem;
-  opacity: 0.8;
+.copyright {
+  font-size: 0.7rem;
+  vertical-align: super;
+  margin-right: 0.2rem;
 }
 
 @media (max-width: 768px) {
